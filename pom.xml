@@ -276,12 +276,7 @@
         <groupId>org.keycloak</groupId>
         <artifactId>keycloak-authz-client</artifactId>
         <version>19.0.1</version>
-      </dependency>
-      <dependency>
-          <groupId>org.apache.httpcomponents</groupId>
-          <version>4.5.13.redhat-00001</version>
-          <artifactId>httpclient</artifactId>
-          <scope>provided</scope>
+        <scope>provided</scope>
       </dependency>
 
       <!-- Test dependencies -->
