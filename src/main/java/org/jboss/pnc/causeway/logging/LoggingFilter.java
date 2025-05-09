@@ -18,6 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import java.util.List;
+import java.util.Map;
+
+import static org.jboss.pnc.common.log.MDCUtils.getHeadersFromMDC;
+
 /**
  * @author <a href="mailto:matejonnet@gmail.com">Matej Lazar</a>
  */
@@ -29,9 +34,17 @@ public class LoggingFilter implements ContainerRequestFilter, ContainerResponseF
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
+        for (Map.Entry<String, List<String>> entry : requestContext.getHeaders().entrySet()) {
+            for (String value : entry.getValue()) {
+                logger.info("MDC header key from requestContext: {} = {}", entry.getKey(), value);
+            }
+        }
 
         requestContext.setProperty(REQUEST_EXECUTION_START, System.currentTimeMillis());
         MDCUtils.setMDCFromRequestContext(requestContext);
+        for (Map.Entry<String, String> entry : MDCUtils.getHeadersFromMDC().entrySet()) {
+            logger.info("MDC header key: {} = {}", entry.getKey(), entry.getValue());
+        }
         MDCUtils.addMDCFromOtelHeadersWithFallback(requestContext, Span.current().getSpanContext(), false);
 
         UriInfo uriInfo = requestContext.getUriInfo();
