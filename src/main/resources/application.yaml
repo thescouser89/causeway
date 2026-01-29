@@ -6,6 +6,9 @@
 # I believe I need to add this so tha the extension is activated at runtime?
 quarkus:
   http:
+    auth:
+      # required for LDAP: build-time property
+      basic: true
     enable-compression: true
     enable-decompression: true
     limits:
@@ -42,6 +45,19 @@ quarkus:
     client-id: my-app
     credentials:
       secret: secret
+
+  security:
+    ldap:
+      # enable LDAP: build-time property
+      enabled: true
+      cache:
+        enabled: true
+        max-age: 5m
+      dir-context:
+        url: ldaps://ldap-server.com
+      identity-mapping:
+        search-base-dn: ou=company.com
+
   fault-tolerance:
     "org.jboss.pnc.causeway.brewclient.BrewClientImpl/findBrewBuildOfNVR":
       retry:
@@ -170,4 +186,10 @@ causeway:
       enabled: false
     oidc-client:
       enabled: false
+    http:
+      auth:
+        basic: false
+    security:
+      ldap:
+        enabled: false
 
